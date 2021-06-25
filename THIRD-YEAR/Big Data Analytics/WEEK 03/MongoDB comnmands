@@ -1,0 +1,137 @@
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+> use student
+switched to db student
+
+> db.student.insert({ rollno:11, name:"ABC", age:21, contact:9916859015, email:"ABC.cs18@bmsce.ac.in" })
+WriteResult({ "nInserted" : 1 })
+
+> db.student.insert({ rollno:60, name:"STALIN", age:21, contact:9909856809, email:"stalin.cs18@bmsce.ac.in" })
+WriteResult({ "nInserted" : 1 })
+
+> db.student.insert({ rollno:50, name:"NALIN", age:21, contact:9709856809, email:"nalin.cs18@bmsce.ac.in" })
+WriteResult({ "nInserted" : 1 })
+
+> db.student.find().pretty()
+{
+	"_id" : ObjectId("606acf78ea08bfbe4c269c30"),
+	"rollno" : 11,
+	"name" : "ABC",
+	"age" : 21,
+	"contact" : 9916859015,
+	"email" : "ABC.cs18@bmsce.ac.in"
+}
+{
+	"_id" : ObjectId("606acffbea08bfbe4c269c31"),
+	"rollno" : 60,
+	"name" : "STALIN",
+	"age" : 21,
+	"contact" : 9909856809,
+	"email" : "stalin.cs18@bmsce.ac.in"
+}
+{
+	"_id" : ObjectId("606ad08aea08bfbe4c269c32"),
+	"rollno" : 50,
+	"name" : "NALIN",
+	"age" : 21,
+	"contact" : 9709856809,
+	"email" : "nalin.cs18@bmsce.ac.in"
+}
+
+> db.student.update({"rollno":11}, {$set:{"name":"FEM"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.student.find().pretty()
+{
+	"_id" : ObjectId("606acf78ea08bfbe4c269c30"),
+	"rollno" : 11,
+	"name" : "FEM",
+	"age" : 21,
+	"contact" : 9916859015,
+	"email" : "ABC.cs18@bmsce.ac.in"
+}
+{
+	"_id" : ObjectId("606acffbea08bfbe4c269c31"),
+	"rollno" : 60,
+	"name" : "STALIN",
+	"age" : 21,
+	"contact" : 9909856809,
+	"email" : "stalin.cs18@bmsce.ac.in"
+}
+{
+	"_id" : ObjectId("606ad08aea08bfbe4c269c32"),
+	"rollno" : 50,
+	"name" : "NALIN",
+	"age" : 21,
+	"contact" : 9709856809,
+	"email" : "nalin.cs18@bmsce.ac.in"
+}
+
+> db.student.update({"rollno":11}, {$set:{"email":"FEM@bmsce.ac.in"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.student.find().pretty()
+{
+	"_id" : ObjectId("606acf78ea08bfbe4c269c30"),
+	"rollno" : 11,
+	"name" : "FEM",
+	"age" : 21,
+	"contact" : 9916859015,
+	"email" : "FEM@bmsce.ac.in"
+}
+{
+	"_id" : ObjectId("606acffbea08bfbe4c269c31"),
+	"rollno" : 60,
+	"name" : "STALIN",
+	"age" : 21,
+	"contact" : 9909856809,
+	"email" : "stalin.cs18@bmsce.ac.in"
+}
+{
+	"_id" : ObjectId("606ad08aea08bfbe4c269c32"),
+	"rollno" : 50,
+	"name" : "NALIN",
+	"age" : 21,
+	"contact" : 9709856809,
+	"email" : "nalin.cs18@bmsce.ac.in"
+}
+
+madhu@madhu-HP-250-G7-Notebook-PC:~$ mongoexport --db=student --collection=student --type=csv --fields=rollno,name,age,contact,email --out=home\student.csv
+2021-04-05T14:48:33.232+0530	connected to: mongodb://localhost/
+2021-04-05T14:48:33.249+0530	exported 3 records
+
+> db.dropDatabase()
+{ "dropped" : "student", "ok" : 1 }
+
+madhu@madhu-HP-250-G7-Notebook-PC:~$ mongoimport -d student -c student --type csv --file=home\student.csv --headerline
+2021-04-05T14:52:24.058+0530	connected to: mongodb://localhost/
+2021-04-05T14:52:24.060+0530	3 document(s) imported successfully. 0 document(s) failed to import.
+
+> db.student.find().pretty()
+{
+	"_id" : ObjectId("606add39463dc4ecb4aa978a"),
+	"rollno" : 60,
+	"name" : "STALIN",
+	"age" : 21,
+	"contact" : 9909856809,
+	"email" : "stalin.cs18@bmsce.ac.in"
+}
+{
+	"_id" : ObjectId("606add39463dc4ecb4aa978b"),
+	"rollno" : 50,
+	"name" : "NALIN",
+	"age" : 21,
+	"contact" : 9709856809,
+	"email" : "nalin.cs18@bmsce.ac.in"
+}
+{
+	"_id" : ObjectId("606add39463dc4ecb4aa978c"),
+	"rollno" : 11,
+	"name" : "FEM",
+	"age" : 21,
+	"contact" : 9916859015,
+	"email" : "FEM@bmsce.ac.in"
+}

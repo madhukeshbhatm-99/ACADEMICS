@@ -1,0 +1,6 @@
+Weather,AirTemperature,Humidity,WaterTemperature,Wind,Goes out
+Sunny,Moderate,Normal,Warm,Strong,Yes
+Sunny,High,Normal,Too Warm ,Strong,No
+Rainy,Low,High,Cold,Breezy,No
+Rainy,High,High,Warm,Breezy,Yes
+Snowy,Moderate,Normal,Cold,Strong,Yes

@@ -1,0 +1,302 @@
+
+cqlsh> CREATE KEYSPACE students WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+
+
+cqlsh> DESCRIBE KEYSPACES
+
+students  system_schema  system_auth  system  system_distributed  system_traces
+
+
+cqlsh> SELECT * FROM system_schema.keyspaces;
+
+ keyspace_name      | durable_writes | replication
+--------------------+----------------+-------------------------------------------------------------------------------------
+        system_auth |           True | {'class': 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '1'}
+      system_schema |           True |                             {'class': 'org.apache.cassandra.locator.LocalStrategy'}
+ system_distributed |           True | {'class': 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '3'}
+             system |           True |                             {'class': 'org.apache.cassandra.locator.LocalStrategy'}
+      system_traces |           True | {'class': 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '2'}
+           students |           True | {'class': 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '1'}
+
+(6 rows)
+
+
+cqlsh>  USE students;
+
+
+cqlsh:students> CREATE TABLE STUDENT_INFO (
+            ... RollNumber int PRIMARY KEY,
+            ... StudentName text,
+            ... DateOfJoinig timestamp,
+            ... LastExamPercent double
+            ... );
+
+
+cqlsh:students> DESCRIBE TABLES;
+
+student_info
+
+
+cqlsh:students> DESCRIBE TABLE student_info;
+
+CREATE TABLE students.student_info (
+    rollnumber int PRIMARY KEY,
+    dateofjoinig timestamp,
+    lastexampercent double,
+    studentname text
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+.    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+cqlsh:students> BEGIN BATCH
+            ... INSERT INTO student_info (
+            ... RollNumber,
+            ... StudentName,
+            ... DateOfJoining,
+            ... LastExamPercent ) VALUES (
+            ... 10,
+            ... 'Dilip',
+            ... '2020-06-01',
+            ... 78.2 )
+            ... INSERT INTO student_info (
+            ... RollNumber,
+            ... StudentName,
+            ... DateOfJoining,
+            ... LastExamPercent ) VALUES (
+            ... 15,
+            ... 'Mayur',
+            ... '2021-01-01',
+            ... 88.2 )
+            ... APPLY BATCH;
+
+
+cqlsh:students> SELECT * FROM student_info;
+
+ rollnumber | dateofjoining                   | lastexampercent | studentname
+------------+---------------------------------+-----------------+-------------
+         10 | 2020-05-31 18:30:00.000000+0000 |            78.2 |       Dilip
+         15 | 2020-12-31 18:30:00.000000+0000 |            88.2 |       Mayur
+
+(2 rows)
+
+
+cqlsh:students> UPDATE student_info SET StudentName = 'Ganesh' WHERE RollNumber = 15;
+
+
+cqlsh:students> SELECT * FROM student_info;
+
+ rollnumber | dateofjoining                   | lastexampercent | studentname
+------------+---------------------------------+-----------------+-------------
+         10 | 2020-05-31 18:30:00.000000+0000 |            78.2 |       Dilip
+         15 | 2020-12-31 18:30:00.000000+0000 |            88.2 |      Ganesh
+
+(2 rows)
+
+
+cqlsh:students> SELECT * FROM student_info WHERE RollNumber IN (10, 11, 12);
+
+ rollnumber | dateofjoining                   | lastexampercent | studentname
+------------+---------------------------------+-----------------+-------------
+         10 | 2020-05-31 18:30:00.000000+0000 |            78.2 |       Dilip
+
+(1 rows)
+
+
+cqlsh:students> CREATE INDEX ON student_info(StudentName);
+
+
+cqlsh:students> SELECT * FROM student_info WHERE StudentName = 'Dilip';
+
+ rollnumber | dateofjoining                   | lastexampercent | studentname
+------------+---------------------------------+-----------------+-------------
+         10 | 2020-05-31 18:30:00.000000+0000 |            78.2 |       Dilip
+
+(1 rows)
+
+
+cqlsh:students> CREATE INDEX ON student_info(LastExamPercent);
+
+
+cqlsh:students> SELECT * FROM student_info WHERE LastExamPercent = 78.2;
+
+ rollnumber | dateofjoining                   | lastexampercent | studentname
+------------+---------------------------------+-----------------+-------------
+         10 | 2020-05-31 18:30:00.000000+0000 |            78.2 |       Dilip
+
+(1 rows)
+
+
+cqlsh:students> SELECT RollNumber, LastExamPercent FROM student_info LIMIT 1;
+
+ rollnumber | lastexampercent
+------------+-----------------
+         10 |            78.2
+
+(1 rows)
+
+
+cqlsh:students> SELECT RollNumber, StudentName AS Name FROM student_info;
+
+ rollnumber | name
+------------+--------
+         10 |  Dilip
+         15 | Ganesh
+
+(2 rows)
+
+
+cqlsh:students> UPDATE student_info SET StudentName = 'Deepa', LastExamPercent = 97.9 WHERE RollNumber = 10;
+
+
+cqlsh:students> SELECT RollNumber, StudentName, LastExamPercent FROM student_info WHERE RollNumber = 10;
+
+ rollnumber | studentname | lastexampercent
+------------+-------------+-----------------
+         10 |       Deepa |            97.9
+
+(1 rows)
+
+
+cqlsh:students> DELETE LastExamPercent FROM student_info WHERE RollNumber = 10
+
+
+cqlsh:students> SELECT * FROM student_info WHERE RollNumber = 10;
+
+ rollnumber | dateofjoining                   | lastexampercent | studentname
+------------+---------------------------------+-----------------+-------------
+         10 | 2020-05-31 18:30:00.000000+0000 |            null |       Deepa
+
+(1 rows)
+
+
+cqlsh:students> DELETE FROM student_info WHERE RollNumber = 10;
+
+
+cqlsh:students> SELECT * FROM student_info WHERE RollNumber = 10;
+
+ rollnumber | dateofjoining | lastexampercent | studentname
+------------+---------------+-----------------+-------------
+
+(0 rows)
+
+
+
+
+
+cqlsh:students> CREATE TABLE PROJECT_DETAILS (
+            ... ProjectID int,
+            ... ProjectName text,
+            ... StudentName text,
+            ... rating double,
+            ... duration int,
+            ... PRIMARY KEY(ProjectID, ProjectName)
+            ... );
+
+
+cqlsh:students> DESCRIBE TABLE PROJECT_DETAILS;
+
+CREATE TABLE students.project_details (
+    projectid int,
+    projectname text,
+    duration int,
+    rating double,
+    studentname text,
+    PRIMARY KEY (projectid, projectname)
+) WITH CLUSTERING ORDER BY (projectname ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+cqlsh:students> BEGIN BATCH
+            ... INSERT INTO project_details (
+            ... ProjectID,
+            ... ProjectName,
+            ... StudentName,
+            ... Rating,
+            ... Duration ) VALUES (
+            ... 1,
+            ... 'MS Data Migration',
+            ... 'Dilip',
+            ... 8.2,
+            ... 780 )
+            ... INSERT INTO project_details (
+            ... ProjectID,
+            ... ProjectName,
+            ... StudentName,
+            ... Rating,
+            ... Duration ) VALUES (
+            ... 1,
+            ... 'MS Data Warehouse',
+            ... 'Dilip',
+            ... 8.1,
+            ... 800 )
+            ... INSERT INTO project_details (
+            ... ProjectID,
+            ... ProjectName,
+            ... StudentName,
+            ... Rating,
+            ... Duration ) VALUES (
+            ... 2,
+            ... 'AWS Cloud Security',
+            ... 'Mayur',
+            ... 8.8,
+            ... 1200 )
+            ... INSERT INTO project_details (
+            ... ProjectID,
+            ... ProjectName,
+            ... StudentName,
+            ... Rating,
+            ... Duration ) VALUES (
+            ... 2,
+            ... 'AWS Cloud Computing',
+            ... 'Mayur',
+            ... 7.7,
+            ... 2000 )
+            ... APPLY BATCH;
+
+
+
+cqlsh:students> SELECT * FROM project_details;
+
+ projectid | projectname         | duration | rating | studentname
+-----------+---------------------+----------+--------+-------------
+         1 |   MS Data Migration |      780 |    8.2 |       Dilip
+         1 |   MS Data Warehouse |      800 |    8.1 |       Dilip
+         2 | AWS Cloud Computing |     2000 |    7.7 |       Mayur
+         2 |  AWS Cloud Security |     1200 |    8.8 |       Mayur
+
+(4 rows)
+
+
+cqlsh:students> SELECT * FROM project_details WHERE ProjectID = 1;
+
+ projectid | projectname       | duration | rating | studentname
+-----------+-------------------+----------+--------+-------------
+         1 | MS Data Migration |      780 |    8.2 |       Dilip
+         1 | MS Data Warehouse |      800 |    8.1 |       Dilip
+
+(2 rows)

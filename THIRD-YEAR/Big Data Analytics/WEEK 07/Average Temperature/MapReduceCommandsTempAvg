@@ -1,0 +1,211 @@
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ start-all.sh
+WARNING: Attempting to start all Apache Hadoop daemons as hdoop in 10 seconds.
+WARNING: This is not a recommended production deployment configuration.
+WARNING: Use CTRL-C to abort.
+Starting namenodes on [localhost]
+Starting datanodes
+Starting secondary namenodes [madhu-HP-250-G7-Notebook-PC]
+2021-05-10 15:07:08,377 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Starting resourcemanager
+Starting nodemanagers
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ jps
+3505 NameNode
+3635 DataNode
+4085 ResourceManager
+3830 SecondaryNameNode
+4603 Jps
+4223 NodeManager
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -mkdir /temp_input
+2021-05-10 15:10:19,955 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -put /home/madhu/Downloads/temp.txt /temp_input
+2021-05-10 15:12:21,036 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-05-10 15:12:22,332 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop jar /home/madhu/LABS/Big\ Data\ Analysis/temperature.jar temperature.AverageDriver /temp_input/temp.txt /temp_out
+2021-05-10 15:35:13,580 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-05-10 15:35:14,400 INFO client.RMProxy: Connecting to ResourceManager at /127.0.0.1:8032
+2021-05-10 15:35:15,377 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+2021-05-10 15:35:15,836 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/hdoop/.staging/job_1620639438976_0002
+2021-05-10 15:35:17,011 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-05-10 15:35:18,077 INFO input.FileInputFormat: Total input files to process : 1
+2021-05-10 15:35:18,424 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-05-10 15:35:18,915 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-05-10 15:35:19,125 INFO mapreduce.JobSubmitter: number of splits:1
+2021-05-10 15:35:20,417 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-05-10 15:35:20,863 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1620639438976_0002
+2021-05-10 15:35:20,863 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2021-05-10 15:35:22,111 INFO conf.Configuration: resource-types.xml not found
+2021-05-10 15:35:22,113 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2021-05-10 15:35:22,334 INFO impl.YarnClientImpl: Submitted application application_1620639438976_0002
+2021-05-10 15:35:22,484 INFO mapreduce.Job: The url to track the job: http://madhu-HP-250-G7-Notebook-PC:8088/proxy/application_1620639438976_0002/
+2021-05-10 15:35:22,486 INFO mapreduce.Job: Running job: job_1620639438976_0002
+2021-05-10 15:35:40,775 INFO mapreduce.Job: Job job_1620639438976_0002 running in uber mode : false
+2021-05-10 15:35:40,780 INFO mapreduce.Job:  map 0% reduce 0%
+2021-05-10 15:36:14,723 INFO mapreduce.Job:  map 100% reduce 0%
+2021-05-10 15:36:47,309 INFO mapreduce.Job:  map 100% reduce 100%
+2021-05-10 15:36:49,352 INFO mapreduce.Job: Job job_1620639438976_0002 completed successfully
+2021-05-10 15:36:49,573 INFO mapreduce.Job: Counters: 54
+	File System Counters
+		FILE: Number of bytes read=72210
+		FILE: Number of bytes written=594915
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=894861
+		HDFS: Number of bytes written=8
+		HDFS: Number of read operations=8
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+		HDFS: Number of bytes read erasure-coded=0
+	Job Counters 
+		Launched map tasks=1
+		Launched reduce tasks=1
+		Data-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=26226
+		Total time spent by all reduces in occupied slots (ms)=23278
+		Total time spent by all map tasks (ms)=26226
+		Total time spent by all reduce tasks (ms)=23278
+		Total vcore-milliseconds taken by all map tasks=26226
+		Total vcore-milliseconds taken by all reduce tasks=23278
+		Total megabyte-milliseconds taken by all map tasks=26855424
+		Total megabyte-milliseconds taken by all reduce tasks=23836672
+	Map-Reduce Framework
+		Map input records=6565
+		Map output records=6564
+		Map output bytes=59076
+		Map output materialized bytes=72210
+		Input split bytes=106
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=1
+		Reduce shuffle bytes=72210
+		Reduce input records=6564
+		Reduce output records=1
+		Spilled Records=13128
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=277
+		CPU time spent (ms)=4020
+		Physical memory (bytes) snapshot=393723904
+		Virtual memory (bytes) snapshot=5076860928
+		Total committed heap usage (bytes)=257425408
+		Peak Map Physical memory (bytes)=237031424
+		Peak Map Virtual memory (bytes)=2535366656
+		Peak Reduce Physical memory (bytes)=157614080
+		Peak Reduce Virtual memory (bytes)=2541494272
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=894755
+	File Output Format Counters 
+		Bytes Written=8
+		
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -cat /temp_out/*
+2021-05-10 15:38:43,380 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-05-10 15:38:44,529 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+1901	46
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -put /home/madhu/Downloads/sample_temp.txt /temp_input
+2021-05-10 15:47:27,525 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-05-10 15:47:28,861 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop jar /home/madhu/LABS/Big\ Data\ Analysis/temperature.jar temperature.AverageDriver /temp_input/sample_temp.txt /temp_out2
+2021-05-10 15:49:28,702 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-05-10 15:49:29,897 INFO client.RMProxy: Connecting to ResourceManager at /127.0.0.1:8032
+2021-05-10 15:49:30,968 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+2021-05-10 15:49:31,069 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/hdoop/.staging/job_1620639438976_0003
+2021-05-10 15:49:31,574 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-05-10 15:49:31,893 INFO input.FileInputFormat: Total input files to process : 1
+2021-05-10 15:49:32,113 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-05-10 15:49:32,739 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-05-10 15:49:32,837 INFO mapreduce.JobSubmitter: number of splits:1
+2021-05-10 15:49:33,227 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-05-10 15:49:33,314 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1620639438976_0003
+2021-05-10 15:49:33,314 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2021-05-10 15:49:33,623 INFO conf.Configuration: resource-types.xml not found
+2021-05-10 15:49:33,623 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2021-05-10 15:49:33,716 INFO impl.YarnClientImpl: Submitted application application_1620639438976_0003
+2021-05-10 15:49:33,789 INFO mapreduce.Job: The url to track the job: http://madhu-HP-250-G7-Notebook-PC:8088/proxy/application_1620639438976_0003/
+2021-05-10 15:49:33,790 INFO mapreduce.Job: Running job: job_1620639438976_0003
+2021-05-10 15:49:49,469 INFO mapreduce.Job: Job job_1620639438976_0003 running in uber mode : false
+2021-05-10 15:49:49,569 INFO mapreduce.Job:  map 0% reduce 0%
+2021-05-10 15:50:14,091 INFO mapreduce.Job:  map 100% reduce 0%
+2021-05-10 15:50:30,380 INFO mapreduce.Job:  map 100% reduce 100%
+2021-05-10 15:50:34,462 INFO mapreduce.Job: Job job_1620639438976_0003 completed successfully
+2021-05-10 15:50:34,686 INFO mapreduce.Job: Counters: 54
+	File System Counters
+		FILE: Number of bytes read=61
+		FILE: Number of bytes written=450633
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=646
+		HDFS: Number of bytes written=15
+		HDFS: Number of read operations=8
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+		HDFS: Number of bytes read erasure-coded=0
+	Job Counters 
+		Launched map tasks=1
+		Launched reduce tasks=1
+		Data-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=21913
+		Total time spent by all reduces in occupied slots (ms)=13147
+		Total time spent by all map tasks (ms)=21913
+		Total time spent by all reduce tasks (ms)=13147
+		Total vcore-milliseconds taken by all map tasks=21913
+		Total vcore-milliseconds taken by all reduce tasks=13147
+		Total megabyte-milliseconds taken by all map tasks=22438912
+		Total megabyte-milliseconds taken by all reduce tasks=13462528
+	Map-Reduce Framework
+		Map input records=5
+		Map output records=5
+		Map output bytes=45
+		Map output materialized bytes=61
+		Input split bytes=113
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=2
+		Reduce shuffle bytes=61
+		Reduce input records=5
+		Reduce output records=2
+		Spilled Records=10
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=121
+		CPU time spent (ms)=2680
+		Physical memory (bytes) snapshot=441757696
+		Virtual memory (bytes) snapshot=5079216128
+		Total committed heap usage (bytes)=300941312
+		Peak Map Physical memory (bytes)=267333632
+		Peak Map Virtual memory (bytes)=2536779776
+		Peak Reduce Physical memory (bytes)=174424064
+		Peak Reduce Virtual memory (bytes)=2542436352
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=533
+	File Output Format Counters 
+		Bytes Written=15
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -cat /temp_out2/*
+2021-05-10 15:50:55,745 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-05-10 15:50:56,986 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+1949	94
+1950	3
+

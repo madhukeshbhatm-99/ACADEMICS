@@ -1,0 +1,388 @@
+cqlsh> CREATE KEYSPACE employee WITH REPLICATION = {
+   ... 'class' : 'SimpleStrategy',
+   ... 'replication_factor' : 1
+   ... };
+
+
+cqlsh> DESCRIBE KEYSPACES;
+
+students       system_auth  system_distributed  system_traces
+system_schema  system       employee
+
+
+cqlsh> USE employee;
+
+
+cqlsh:employee> CREATE TABLE employee_info (
+            ... emp_id int PRIMARY KEY,
+            ... emp_name text,
+            ... designation text,
+            ... date_of_joining timestamp,
+            ... salary double,
+            ... dept_name text
+            ... );
+
+
+cqlsh:employee> DESCRIBE employee_info;
+
+CREATE TABLE employee.employee_info (
+    emp_id int PRIMARY KEY,
+    date_of_joining timestamp,
+    dept_name text,
+    designation text,
+    emp_name text,
+    salary double
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+cqlsh:employee> BEGIN BATCH
+            ... INSERT INTO employee_info (
+            ... emp_id,
+            ... emp_name,
+            ... designation,
+            ... date_of_joining,
+            ... salary,
+            ... dept_name
+            ... )
+            ... VALUES (
+            ... 120,
+            ... 'Michael Scott',
+            ... 'General Manager',
+            ... '1994-04-02',
+            ... 85000,
+            ... 'Sales'
+            ... )
+            ... INSERT INTO employee_info (
+            ... emp_id,
+            ... emp_name,
+            ... designation,
+            ... date_of_joining,
+            ... salary,
+            ... dept_name
+            ... )
+            ... VALUES (
+            ... 122,
+            ... 'Jim Halpert',
+            ... 'Sales Officer',
+            ... '2002-02-01',
+            ... 50000,
+            ... 'Sales'
+            ... )
+            ... INSERT INTO employee_info (
+            ... emp_id,
+            ... emp_name,
+            ... designation,
+            ... date_of_joining,
+            ... salary,
+            ... dept_name
+            ... )
+            ... VALUES (
+            ... 123,
+            ... 'Pameela Beasly',
+            ... 'Receptionist',
+            ... '2000-07-02',
+            ... 20000,
+            ... 'Accounts'
+            ... )
+            ... INSERT INTO employee_info (
+            ... emp_id,
+            ... emp_name,
+            ... designation,
+            ... date_of_joining,
+            ... salary,
+            ... dept_name
+            ... )
+            ... VALUES (
+            ... 121,
+            ... 'Andrew Bernard',
+            ... 'Accountant',
+            ... '2006-09-10',
+            ... 45000,
+            ... 'Accounts'
+            ... )
+            ... INSERT INTO employee_info (
+            ... emp_id,
+            ... emp_name,
+            ... designation,
+            ... date_of_joining,
+            ... salary,
+            ... dept_name
+            ... )
+            ... VALUES (
+            ... 125,
+            ... 'Toby Flendorson',
+            ... 'Executive Officer',
+            ... '1998-06-01',
+            ... 75000,
+            ... 'HR'
+            ... )
+            ... APPLY BATCH;
+
+
+cqlsh:employee> SELECT * FROM employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation       | emp_name        | salary
+--------+---------------------------------+-----------+-------------------+-----------------+--------
+    120 | 1994-04-01 18:30:00.000000+0000 |     Sales |   General Manager |   Michael Scott |  85000
+    123 | 2000-07-01 18:30:00.000000+0000 |  Accounts |      Receptionist |  Pameela Beasly |  20000
+    125 | 1998-05-31 18:30:00.000000+0000 |        HR | Executive Officer | Toby Flendorson |  75000
+    122 | 2002-01-31 18:30:00.000000+0000 |     Sales |     Sales Officer |     Jim Halpert |  50000
+    121 | 2006-09-09 18:30:00.000000+0000 |  Accounts |        Accountant |  Andrew Bernard |  45000
+
+(5 rows)
+
+
+cqlsh:employee> UPDATE employee_info SET emp_name = 'Dwight Schrute', dept_name = 'Sales' WHERE emp_id = 121;
+
+
+cqlsh:employee> SELECT * FROM employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation       | emp_name        | salary
+--------+---------------------------------+-----------+-------------------+-----------------+--------
+    120 | 1994-04-01 18:30:00.000000+0000 |     Sales |   General Manager |   Michael Scott |  85000
+    123 | 2000-07-01 18:30:00.000000+0000 |  Accounts |      Receptionist |  Pameela Beasly |  20000
+    125 | 1998-05-31 18:30:00.000000+0000 |        HR | Executive Officer | Toby Flendorson |  75000
+    122 | 2002-01-31 18:30:00.000000+0000 |     Sales |     Sales Officer |     Jim Halpert |  50000
+    121 | 2006-09-09 18:30:00.000000+0000 |     Sales |        Accountant |  Dwight Schrute |  45000
+
+(5 rows)
+
+
+cqlsh:employee> UPDATE employee_info SET projects = {'Paper Revolution', 'Green Papers'} WHERE emp_id = 120;
+
+
+cqlsh:employee> UPDATE employee_info SET projects = {'Automatic Phone Answering System'} WHERE emp_id = 123;
+
+
+cqlsh:employee> UPDATE employee_info SET projects = {'Company Website Frontend and Backend'} WHERE emp_id = 122;
+
+
+cqlsh:employee> UPDATE employee_info SET projects = {'Whoof.com', 'Soil Detecting System'} WHERE emp_id = 121;
+
+
+cqlsh:employee> UPDATE employee_info SET projects = {'DunMuff Company blog site'} WHERE emp_id = 125;
+
+
+cqlsh:employee> SELECT * FROM employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation       | emp_name        | projects                                 | salary
+--------+---------------------------------+-----------+-------------------+-----------------+------------------------------------------+--------
+    120 | 1994-04-01 18:30:00.000000+0000 |     Sales |   General Manager |   Michael Scott |     {'Green Papers', 'Paper Revolution'} |  85000
+    123 | 2000-07-01 18:30:00.000000+0000 |  Accounts |      Receptionist |  Pameela Beasly |     {'Automatic Phone Answering System'} |  20000
+    125 | 1998-05-31 18:30:00.000000+0000 |        HR | Executive Officer | Toby Flendorson |            {'DunMuff Company blog site'} |  75000
+    122 | 2002-01-31 18:30:00.000000+0000 |     Sales |     Sales Officer |     Jim Halpert | {'Company Website Frontend and Backend'} |  50000
+    121 | 2006-09-09 18:30:00.000000+0000 |     Sales |        Accountant |  Dwight Schrute |   {'Soil Detecting System', 'Whoof.com'} |  45000
+
+(5 rows)
+
+
+cqlsh:employee> INSERT INTO employee_info (
+            ... emp_id,
+            ... emp_name,
+            ... designation,
+            ... date_of_joining,
+            ... salary,
+            ... dept_name
+            ... )
+            ... VALUES (
+            ... 127,
+            ... 'Phyllis Vance',
+            ... 'Accountant',
+            ... '2000-04-10',
+            ... 55000,
+            ... 'Accounts'
+            ... ) USING TTL 30;
+
+
+
+cqlsh:employee> SELECT * FROM employee_info WHERE emp_id = 127;
+
+ emp_id | date_of_joining                 | dept_name | designation | emp_name      | projects | salary
+--------+---------------------------------+-----------+-------------+---------------+----------+--------
+    127 | 2000-04-09 18:30:00.000000+0000 |  Accounts |  Accountant | Phyllis Vance |     null |  55000
+
+(1 rows)
+
+
+cqlsh:employee> SELECT emp_name, ttl(emp_name), ttl(salary) FROM employee_info WHERE emp_id = 127;
+
+ emp_name      | ttl(emp_name) | ttl(salary)
+---------------+---------------+-------------
+ Phyllis Vance |            12 |          12
+
+(1 rows)
+
+
+cqlsh:employee> SELECT emp_name, ttl(emp_name), ttl(salary) FROM employee_info WHERE emp_id = 127;
+
+ emp_name | ttl(emp_name) | ttl(salary)
+----------+---------------+-------------
+
+(0 rows)
+
+
+
+cqlsh> CREATE KEYSPACE library WITH REPLICATION = {
+   ... 'class' : 'SimpleStrategy',
+   ... 'replication_factor' : 1
+   ... };
+
+
+cqlsh> USE library;
+
+
+cqlsh:library> CREATE TABLE library_info (
+           ... stud_id int,
+           ... stud_name text,
+           ... counter_value counter,
+           ... date_of_issue timestamp,
+           ... book_id int,
+           ... book_name text,
+           ... PRIMARY KEY(stud_id, stud_name, book_id, book_name, date_of_issue)
+           ... );
+
+
+cqlsh:library> UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id=112 AND stud_name = 'RAVI' AND book_id = 101 AND book_name = 'BIG DATA ANALYTICS' AND date_of_issue = '2021-03-29';
+
+
+cqlsh:library> UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id=112 AND stud_name = 'RAVI' AND book_id = 101 AND book_name = 'BIG DATA ANALYTICS' AND date_of_issue = '2021-03-29';
+
+
+cqlsh:library> SELECT * FROM library_info;
+
+ stud_id | stud_name | book_id | book_name          | date_of_issue                   | counter_value
+---------+-----------+---------+--------------------+---------------------------------+---------------
+     112 |      RAVI |     101 | BIG DATA ANALYTICS | 2021-03-28 18:30:00.000000+0000 |             2
+
+(1 rows)
+
+
+cqlsh:library> UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id = 114 AND stud_name = 'RAM' AND book_id = 113 AND book_name =
+
+
+cqlsh:library> UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id = 115 AND stud_name = 'KRISHNA' AND book_id = 113 AND book_nam
+
+
+cqlsh:library> UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id = 115 AND stud_name = 'KRISHNA' AND book_id = 113 AND book_name = 'BIG DATA ANALYTICS' AND date_of_issue = '2021-03-29';
+
+
+cqlsh:library> SELECT * FROM library_info;
+
+ stud_id | stud_name | book_id | book_name          | date_of_issue                   | counter_value
+---------+-----------+---------+--------------------+---------------------------------+---------------
+     114 |       RAM |     113 |   MACHINE LEARNING | 2021-03-28 18:30:00.000000+0000 |             1
+     112 |      RAVI |     101 | BIG DATA ANALYTICS | 2021-03-28 18:30:00.000000+0000 |             2
+     115 |   KRISHNA |     113 | BIG DATA ANALYTICS | 2021-03-28 18:30:00.000000+0000 |             1
+     115 |   KRISHNA |     113 |   MACHINE LEARNING | 2021-03-28 18:30:00.000000+0000 |             1
+
+(4 rows)
+
+
+cqlsh:library> UPDATE library_info SET counter_value = counter_value + 3 WHERE stud_id = 115 AND stud_name = 'KRISHNA' AND book_id = 113 AND book_nam
+
+
+cqlsh:library> SELECT * FROM library_info;
+
+ stud_id | stud_name | book_id | book_name          | date_of_issue                   | counter_value
+---------+-----------+---------+--------------------+---------------------------------+---------------
+     114 |       RAM |     113 |   MACHINE LEARNING | 2021-03-28 18:30:00.000000+0000 |             1
+     112 |      RAVI |     101 | BIG DATA ANALYTICS | 2021-03-28 18:30:00.000000+0000 |             2
+     115 |   KRISHNA |     113 | BIG DATA ANALYTICS | 2021-03-28 18:30:00.000000+0000 |             1
+     115 |   KRISHNA |     113 |   MACHINE LEARNING | 2021-03-28 18:30:00.000000+0000 |             4
+
+(4 rows)
+
+
+cqlsh:library> COPY library_info(stud_id, stud_name, book_id, book_name, date_of_issue, counter_value) TO 'F:\BMSCE ACADEMICS\THIRD YEAR\SIXTH SEMESTER\Big Data Analytics\LABS\library.csv';
+Using 3 child processes
+
+Starting copy of library.library_info with columns [stud_id, stud_name, book_id, book_name, date_of_issue, counter_value].
+Processed: 4 rows; Rate:       5 rows/s; Avg. rate:       2 rows/s
+4 rows exported to 1 files in 12.597 seconds.
+
+
+cqlsh:library> TRUNCATE library_info;
+
+
+cqlsh:library> COPY library_info(stud_id, stud_name, book_id, book_name, date_of_issue, counter_value) FROM 'F:\BMSCE ACADEMICS\THIRD YEAR\SIXTH SEME
+Using 3 child processes\LABS\library.csv';
+
+Starting copy of library.library_info with columns [stud_id, stud_name, book_id, book_name, date_of_issue, counter_value].
+Process ImportProcess-4:       0 rows/s; Avg. rate:       0 rows/s
+PTrocess ImportProcess-5:
+raceback (most recent call last):
+TP raceback (most recent call last):
+rocess ImportProcess-6:
+ File "C:\Users\admin\anaconda3\envs\py27\lib\multiprocessing\process.py", line 267, in _bootstrap
+ T File "C:\Users\admin\anaconda3\envs\py27\lib\multiprocessing\process.py", line 267, in _bootstrap
+raceback (most recent call last):
+  File "C:\Users\admin\anaconda3\envs\py27\lib\multiprocessing\process.py", line 267, in _bootstrap
+     self.run()
+   self.run()
+   File "C:\Program Files\apache-cassandra-3.11.10\bin\..\pylib\cqlshlib\copyutil.py", line 2330, in run
+  File "C:\Program Files\apache-cassandra-3.11.10\bin\..\pylib\cqlshlib\copyutil.py", line 2330, in run
+   self.run()
+  File "C:\Program Files\apache-cassandra-3.11.10\bin\..\pylib\cqlshlib\copyutil.py", line 2330, in run
+    self.close()
+  File "C:\Program Files\apache-cassandra-3.11.10\bin\..\pylib\cqlshlib\copyutil.py", line 2334, in close
+      self.close()
+   self._session.cluster.shutdown()
+   self.close()
+    File "C:\Program Files\apache-cassandra-3.11.10\bin\..\pylib\cqlshlib\copyutil.py", line 2334, in close
+ File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\cluster.py", line 1259, in shutdown
+ File "C:\Program Files\apache-cassandra-3.11.10\bin\..\pylib\cqlshlib\copyutil.py", line 2334, in close
+    self._session.cluster.shutdown()
+     self._session.cluster.shutdown()
+ File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\cluster.py", line 1259, in shutdown
+  File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\cluster.py", line 1259, in shutdown
+    self.control_connection.shutdown()
+  File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\cluster.py", line 2850, in shutdown
+    self._connection.close()
+  File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\io\asyncorereactor.py", line 373, in close
+      AsyncoreConnection.create_timer(0, partial(asyncore.dispatcher.close, self))
+   self.control_connection.shutdown()
+   self.control_connection.shutdown()
+    File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\io\asyncorereactor.py", line 335, in create_timer
+ File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\cluster.py", line 2850, in shutdown
+ File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\cluster.py", line 2850, in shutdown
+      cls._loop.add_timer(timer)
+   self._connection.close()
+   self._connection.close()
+A  ttributeError: 'NoneType' object has no attribute 'add_timer'
+ File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\io\asyncorereactor.py", line 373, in close
+ File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\io\asyncorereactor.py", line 373, in close
+     AsyncoreConnection.create_timer(0, partial(asyncore.dispatcher.close, self))
+   AsyncoreConnection.create_timer(0, partial(asyncore.dispatcher.close, self))
+  File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\io\asyncorereactor.py", line 335, in create_timer
+     cls._loop.add_timer(timer)
+ File "C:\Program Files\apache-cassandra-3.11.10\bin\..\lib\cassandra-driver-internal-only-3.11.0-bb96859b.zip\cassandra-driver-3.11.0-bb96859b\cassandra\io\asyncorereactor.py", line 335, in create_timer
+A ttributeError: 'NoneType' object has no attribute 'add_timer'
+   cls._loop.add_timer(timer)
+AttributeError: 'NoneType' object has no attribute 'add_timer'
+Processed: 4 rows; Rate:       0 rows/s; Avg. rate:       0 rows/s
+4 rows imported from 1 files in 12.370 seconds (0 skipped).
+
+
+cqlsh:library> SELECT * FROM library_info;
+
+ stud_id | stud_name | book_id | book_name          | date_of_issue                   | counter_value
+---------+-----------+---------+--------------------+---------------------------------+---------------
+     114 |       RAM |     113 |   MACHINE LEARNING | 2021-03-28 18:30:00.000000+0000 |             1
+     112 |      RAVI |     101 | BIG DATA ANALYTICS | 2021-03-28 18:30:00.000000+0000 |             2
+     115 |   KRISHNA |     113 | BIG DATA ANALYTICS | 2021-03-28 18:30:00.000000+0000 |             1
+     115 |   KRISHNA |     113 |   MACHINE LEARNING | 2021-03-28 18:30:00.000000+0000 |             4
+
+(4 rows)

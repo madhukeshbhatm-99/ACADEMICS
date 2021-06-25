@@ -1,0 +1,273 @@
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ jps
+9505 NameNode
+10226 NodeManager
+10774 Jps
+9639 DataNode
+10088 ResourceManager
+9837 SecondaryNameNode
+
+
+1. version
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop version
+Hadoop 3.2.1
+Source code repository https://gitbox.apache.org/repos/asf/hadoop.git -r b3cbbb467e22ea829b3808f4b7b01d07e0bf3842
+Compiled by rohithsharmaks on 2019-09-10T15:56Z
+Compiled with protoc 2.5.0
+From source with checksum 776eaf9eee9c0ffc370bcbc1888737
+This command was run using /home/hdoop/hadoop-3.2.1/share/hadoop/common/hadoop-common-3.2.1.jar
+
+
+2. mkdir
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -mkdir /samplefile1
+2021-04-20 13:37:25,376 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -mkdir /samplefile2
+2021-04-20 13:37:43,271 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -mkdir /samplefile3
+2021-04-20 13:38:18,887 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+
+3. ls
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls /
+2021-04-20 13:38:41,762 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 3 items
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:37 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:37 /samplefile2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:38 /samplefile3
+
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ ls
+dfsdata  hadoop-3.2.1  hadoop-3.2.1.tar.gz  tmpdata
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ mkdir lab
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ mkdir lab/samples/
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ mkdir lab/samples/file1
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ mkdir lab/samples/file2
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ mkdir lab/samples/file3
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ mkdir lab/samples/file4
+
+
+4. put / copyFromLocal
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -put ~/lab/samples/file1 /
+2021-04-20 13:48:24,640 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -put ~/lab/samples/file2 /samplefile1
+2021-04-20 13:49:04,048 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls /
+2021-04-20 13:50:32,226 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 4 items
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:48 /file1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:49 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:37 /samplefile2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:38 /samplefile3
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls -R /
+2021-04-20 13:52:21,533 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:48 /file1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:49 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:49 /samplefile1/file2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:37 /samplefile2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:38 /samplefile3
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -copyFromLocal ~/lab/samples/file3 /samplefile2
+2021-04-20 13:58:22,912 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -copyFromLocal ~/lab/sam'ples/file4 /samplefile3
+2021-04-20 13:58:38,623 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls -R /
+2021-04-20 13:58:49,088 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:48 /file1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:49 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:49 /samplefile1/file2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile2/file3
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile3
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile3/file4
+
+
+5. get / copyToLocal
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -get /file1 ~/lab/copies
+2021-04-20 19:16:54,079 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -get /samplefile1/file2 ~/lab/copies
+2021-04-20 19:17:59,535 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -copyToLocal /samplefile2/file3 ~/lab/copies
+2021-04-20 19:19:09,548 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -copyToLocal /samplefile3/file4 ~/lab/copies
+2021-04-20 19:19:30,733 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ ls -l lab/copies
+total 12
+drwxr-xr-x 2 hdoop hdoop 4096 Apr 20 19:18 file2
+drwxr-xr-x 2 hdoop hdoop 4096 Apr 20 19:19 file3
+drwxr-xr-x 2 hdoop hdoop 4096 Apr 20 19:19 file4
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ ls -l lab
+total 8
+drwxr-xr-x 5 hdoop hdoop 4096 Apr 20 19:19 copies
+drwxrwxr-x 6 hdoop hdoop 4096 Apr 20 13:47 samples
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -get /file1 ~/lab/copies
+2021-04-20 19:22:17,555 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ ls -l lab/copies
+total 16
+drwxr-xr-x 2 hdoop hdoop 4096 Apr 20 19:22 file1
+drwxr-xr-x 2 hdoop hdoop 4096 Apr 20 19:18 file2
+drwxr-xr-x 2 hdoop hdoop 4096 Apr 20 19:19 file3
+drwxr-xr-x 2 hdoop hdoop 4096 Apr 20 19:19 file4
+
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ mkdir lab/text
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ cd lab/text/
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~/lab/text$ cat > text1
+Hi
+I'm executing hadoop commands
+^C
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~/lab/text$ cd
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -copyFromLocal ~/lab/text/text1 /
+2021-04-20 19:26:31,016 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-04-20 19:26:33,108 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls /
+2021-04-20 19:27:17,423 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 5 items
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:48 /file1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:49 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile3
+-rw-r--r--   1 hdoop supergroup         33 2021-04-20 19:26 /text1
+
+6. cat
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -cat /text1
+2021-04-20 19:28:24,990 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-04-20 19:28:26,530 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+Hi
+I'm executing hadoop commands
+
+
+7. mv
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -mv /file1 /samplefile1
+2021-04-20 19:31:09,926 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls /samplefile1
+2021-04-20 19:31:49,316 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 2 items
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:48 /samplefile1/file1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:49 /samplefile1/file2
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls /
+2021-04-20 19:32:12,458 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 4 items
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 19:31 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile3
+-rw-r--r--   1 hdoop supergroup         33 2021-04-20 19:26 /text1
+
+
+8. cp
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -cp /text1 /samplefile3
+2021-04-20 19:33:32,689 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-04-20 19:33:34,093 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-04-20 19:33:34,332 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls -R /
+2021-04-20 19:33:52,862 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 19:31 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:48 /samplefile1/file1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:49 /samplefile1/file2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile2/file3
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 19:33 /samplefile3
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile3/file4
+-rw-r--r--   1 hdoop supergroup         33 2021-04-20 19:33 /samplefile3/text1
+-rw-r--r--   1 hdoop supergroup         33 2021-04-20 19:26 /text1
+
+
+9. rm
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -rm /text1
+2021-04-20 19:49:33,071 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Deleted /text1
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls /
+2021-04-20 19:49:44,650 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 3 items
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 19:31 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 13:58 /samplefile2
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 19:33 /samplefile3
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -rm -r /samplefile2
+2021-04-20 19:51:13,448 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Deleted /samplefile2
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -ls /
+2021-04-20 19:51:21,573 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 2 items
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 19:31 /samplefile1
+drwxr-xr-x   - hdoop supergroup          0 2021-04-20 19:33 /samplefile3
+
+
+10. du
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -du -s /samplefile3/text1
+2021-04-20 19:54:16,666 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+33  33  /samplefile3/text1
+
+
+11. df
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -df 
+2021-04-20 19:55:56,239 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Filesystem                     Size   Used     Available  Use%
+hdfs://127.0.0.1:9000  267221413888  45056  155517390848    0%
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -df -h
+2021-04-20 19:56:16,756 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Filesystem                Size  Used  Available  Use%
+hdfs://127.0.0.1:9000  248.9 G  44 K    144.8 G    0%
+
+
+12. count
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -count -v -h /
+2021-04-20 20:01:44,154 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+   DIR_COUNT   FILE_COUNT       CONTENT_SIZE PATHNAME
+           6            1                 33 /
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -count -v -h -q /
+2021-04-20 20:02:07,036 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+       QUOTA       REM_QUOTA     SPACE_QUOTA REM_SPACE_QUOTA    DIR_COUNT   FILE_COUNT       CONTENT_SIZE PATHNAME
+       8.0 E           8.0 E            none             inf            6            1                 33 /
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -count -v -q /
+2021-04-20 20:02:22,339 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+       QUOTA       REM_QUOTA     SPACE_QUOTA REM_SPACE_QUOTA    DIR_COUNT   FILE_COUNT       CONTENT_SIZE PATHNAME
+9223372036854775807 9223372036854775800            none             inf            6            1                 33 /
+
+hdoop@madhu-HP-250-G7-Notebook-PC:~$ hadoop fs -count -v -u /
+2021-04-20 20:02:33,945 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+       QUOTA       REM_QUOTA     SPACE_QUOTA REM_SPACE_QUOTA PATHNAME
+9223372036854775807 9223372036854775800            none             inf /

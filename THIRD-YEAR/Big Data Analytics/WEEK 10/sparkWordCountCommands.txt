@@ -1,0 +1,23 @@
+scala> val tfile = sc.textFile("inputFile.txt")
+tfile: org.apache.spark.rdd.RDD[String] = inputFile.txt MapPartitionsRDD[1] at textFile at <console>:24
+
+scala> val count = tfile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_+_)
+count: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[4] at reduceByKey at <console>:25
+
+scala> count.collect()
+res0: Array[(String, Int)] = Array((Travel,4), (Car,5), (Father,5), (Sister,2), (Office,1), (Brother,2), (College,2), (Bike,5), (Mother,2), (Home,2))
+
+scala> import scala.collection.immutable.ListMap
+import scala.collection.immutable.ListMap
+
+scala> val sorted = ListMap(count.collect.sortWith(_._2 > _._2):_*)
+sorted: scala.collection.immutable.ListMap[String,Int] = ListMap(Car -> 5, Father -> 5, Bike -> 5, Travel -> 4, Sister -> 2, Brother -> 2, College -> 2, Mother -> 2, Home -> 2, Office -> 1)
+
+scala> println(sorted)
+ListMap(Car -> 5, Father -> 5, Bike -> 5, Travel -> 4, Sister -> 2, Brother -> 2, College -> 2, Mother -> 2, Home -> 2, Office -> 1)
+
+scala> for((k, v) <- sorted) if(v > 4) println(k.toUpperCase + " => " + "Number of times repeated: " + v)
+CAR => Number of times repeated: 5
+FATHER => Number of times repeated: 5
+BIKE => Number of times repeated: 5
+
